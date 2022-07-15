@@ -6,7 +6,7 @@ const CardsModel = require("../models/cards");
 module.exports.getCards = (req, res) => {
   CardsModel.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({ message: "Произошла ошибка" });
     });
 };
@@ -53,11 +53,15 @@ module.exports.likeCard = (req, res) => {
         res.status(BAD_REQUEST).send({
           message: "Передан несуществующий _id карточки.",
         });
+
         return;
-      } else if (err.name === "ValidationError") {
+      }
+
+      if (err.name === "ValidationError") {
         res.status(VALIDATION_ERROR).send({
           message: "Переданы некорректные данные для постановки лайка.",
         });
+
         return;
       }
 
@@ -77,11 +81,15 @@ module.exports.dislikeCard = (req, res) => {
         res.status(BAD_REQUEST).send({
           message: "Передан несуществующий _id карточки.",
         });
+
         return;
-      } else if (err.name === "ValidationError") {
+      }
+
+      if (err.name === "ValidationError") {
         res.status(VALIDATION_ERROR).send({
           message: "Переданы некорректные данные для снятии лайка.",
         });
+
         return;
       }
 

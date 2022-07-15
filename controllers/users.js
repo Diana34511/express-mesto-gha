@@ -1,11 +1,12 @@
 const UsersModel = require("../models/users");
+
 const VALIDATION_ERROR = 400;
 const BAD_REQUEST = 404;
 
 module.exports.getAllUsers = (req, res) => {
   UsersModel.find({})
     .then((users) => res.send({ data: users }))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
 };
 
 module.exports.getUser = (req, res) => {
@@ -50,11 +51,14 @@ module.exports.updateUserProfile = (req, res) => {
         res.status(BAD_REQUEST).send({
           message: "Пользователь с указанным _id не найден.",
         });
+
         return;
-      } else if (err.name === "ValidationError") {
+      }
+      if (err.name === "ValidationError") {
         res.status(VALIDATION_ERROR).send({
           message: "Переданы некорректные данные при обновлении профиля.",
         });
+
         return;
       }
 
@@ -74,11 +78,14 @@ module.exports.updateAvatar = (req, res) => {
         res.status(BAD_REQUEST).send({
           message: "Пользователь с указанным _id не найден.",
         });
+
         return;
-      } else if (err.name === "ValidationError") {
+      }
+      if (err.name === "ValidationError") {
         res.status(VALIDATION_ERROR).send({
           message: "Переданы некорректные данные при обновлении аватара.",
         });
+
         return;
       }
 
