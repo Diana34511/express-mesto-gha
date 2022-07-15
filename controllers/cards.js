@@ -18,7 +18,7 @@ module.exports.createCard = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   CardsModel.findByIdAndRemove(req.params.cardId)
     .then((card) => res.send({ data: card }))
-    .catch((err) => res.status(500).send({ message: "Произошла ошибка" }));
+    .catch((err) => res.status(500).send({ message: err.message }));
 };
 
 module.exports.likeCard = (req, res) => {
