@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const CardsModel = require("../models/cards");
+
 const {
   createCard,
   getCards,
