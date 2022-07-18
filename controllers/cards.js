@@ -38,7 +38,16 @@ module.exports.createCard = (req, res) => {
 
 module.exports.deleteCard = (req, res) => {
   CardsModel.findByIdAndRemove(req.params.cardId)
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      if (card) {
+        res.send({ data: card });
+        return;
+      }
+
+      res.status(BAD_REQUEST).send({
+        message: "Карточка с указанным _id не найдена.",
+      });
+    })
     .catch((err) => {
       if (err.name === "CastError") {
         res.status(VALIDATION_ERROR).send({
