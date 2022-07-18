@@ -47,10 +47,19 @@ module.exports.likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true }
   )
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      if (card) {
+        res.send({ data: card });
+        return;
+      }
+
+      res.status(BAD_REQUEST).send({
+        message: "Карточка с указанным _id не найдена.",
+      });
+    })
     .catch((err) => {
       if (err.name === "CastError") {
-        res.status(BAD_REQUEST).send({
+        res.status(VALIDATION_ERROR).send({
           message: "Передан несуществующий _id карточки.",
         });
 
@@ -75,10 +84,19 @@ module.exports.dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     { new: true, runValidators: true }
   )
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      if (card) {
+        res.send({ data: card });
+        return;
+      }
+
+      res.status(BAD_REQUEST).send({
+        message: "Карточка с указанным _id не найдена.",
+      });
+    })
     .catch((err) => {
       if (err.name === "CastError") {
-        res.status(BAD_REQUEST).send({
+        res.status(VALIDATION_ERROR).send({
           message: "Передан несуществующий _id карточки.",
         });
 
