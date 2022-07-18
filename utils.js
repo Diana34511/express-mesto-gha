@@ -1,0 +1,8 @@
+const VALIDATION_ERROR = 400;
+const BAD_REQUEST = 404;
+const SERVER_ERROR = 500;
+const SUCCESS = 201;
+
+module.exports = {
+  VALIDATION_ERROR, BAD_REQUEST, SERVER_ERROR, SUCCESS,
+};
