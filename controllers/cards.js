@@ -15,7 +15,16 @@ module.exports.createCard = (req, res) => {
   const { name, link, likes } = req.body;
 
   CardsModel.create({ name, link, owner: req.user._id, likes })
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      if (card) {
+        res.send({ data: card });
+        return;
+      }
+
+      res.status(BAD_REQUEST).send({
+        message: "Карточка с указанным _id не найдена.",
+      });
+    })
     .catch((err) => {
       if (err.name === "ValidationError") {
         res.status(VALIDATION_ERROR).send({
@@ -32,8 +41,8 @@ module.exports.deleteCard = (req, res) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === "CastError") {
-        res.status(BAD_REQUEST).send({
-          message: " Карточка с указанным _id не найдена.",
+        res.status(VALIDATION_ERROR).send({
+          message: "Карточка с указанным _id не найдена.",
         });
         return;
       }

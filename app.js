@@ -21,6 +21,12 @@ app.use((req, res, next) => {
 app.use("/users", usersRouter);
 app.use("/cards", cardsRouter);
 
+app.all("*", (req, res) => {
+  res.status(404).send({
+    message: "Неверный путь.",
+  });
+});
+
 mongoose.connect(
   "mongodb://localhost:27017/mestodb",
   {
