@@ -12,9 +12,9 @@ module.exports.getCards = (req, res) => {
 };
 
 module.exports.createCard = (req, res) => {
-  const { name, link, ownerId, likes } = req.body;
+  const { name, link, likes } = req.body;
 
-  CardsModel.create({ name, link, owner: ownerId, likes })
+  CardsModel.create({ name, link, owner: req.user._id, likes })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === "ValidationError") {
@@ -45,7 +45,7 @@ module.exports.likeCard = (req, res) => {
   CardsModel.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
-    { new: true, runValidators: true }
+    { new: true }
   )
     .then((card) => res.send({ data: card }))
     .catch((err) => {
